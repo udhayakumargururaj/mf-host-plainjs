@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microfrontend Host</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module">
+        // Import the remote entry
+        import('http://localhost:3001/remoteEntry.js').then(() => {
+            // Import the React component from the remote application
+            import('remoteApp/Button').then(module => {
+                const Button = module.default;
+                const container = document.getElementById('root');
+                const buttonElement = document.createElement('div');
+                container.appendChild(buttonElement);
+
+                // Render the remote component
+                ReactDOM.render(React.createElement(Button), buttonElement);
+            }).catch(err => console.error('Error loading remote module:', err));
+        }).catch(err => console.error('Error loading remote entry:', err));
+    </script>
+</body>
+</html>
